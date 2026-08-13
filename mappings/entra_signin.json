@@ -1,0 +1,17 @@
+{
+  "description": "Entra ID (Azure AD) sign-in log CSV export from the portal (Monitoring > Sign-in logs > Download > CSV). Location is 'City, State, Country'.",
+  "columns": {
+    "event_id": "Request ID",
+    "user_id": "User ID",
+    "ts": "Date (UTC)",
+    "ip": "IP address",
+    "asn": "Autonomous system number",
+    "user_agent": "User agent",
+    "os": "Operating System",
+    "browser": "Browser"
+  },
+  "location": "Location",
+  "success_column": "Status",
+  "success_values": ["Success"],
+  "ts_format": "ISO8601"
+}

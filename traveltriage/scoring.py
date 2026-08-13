@@ -72,7 +72,8 @@ def reasons(row: pd.Series, terms: pd.Series, weights: dict[str, float], kept: b
     """
     contrib = {t: weights.get(t, 0.0) * terms[t] for t in TERMS}
     out: list[str] = []
-    order = sorted(contrib, key=contrib.get, reverse=kept)
+    # Kept: biggest contributions first. Closed: familiarity, ASN first.
+    order = sorted(contrib, key=contrib.get, reverse=True) if kept else TERMS
     for t in order:
         if len(out) >= top:
             break
