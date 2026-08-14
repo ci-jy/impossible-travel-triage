@@ -49,22 +49,28 @@ def cluster_bootstrap(stat_fn, groups: np.ndarray, n_groups: int, rng: np.random
     return [float(np.nanpercentile(vals, 2.5)), float(np.nanpercentile(vals, 97.5))]
 
 
+def ratio_ci(num: np.ndarray, den: np.ndarray, groups: np.ndarray, n_groups: int,
+             rng: np.random.Generator) -> list[float]:
+    """95% bootstrap CI of sum(num)/sum(den), resampling groups (users)."""
+    gn = np.bincount(groups, weights=num.astype(float), minlength=n_groups)
+    gd = np.bincount(groups, weights=den.astype(float), minlength=n_groups)
+
+    def stat(w):
+        d = w @ gd
+        return (w @ gn) / d if d else np.nan
+
+    return cluster_bootstrap(stat, groups, n_groups, rng)
+
+
 def _metric_block(alert_pop: np.ndarray, pop_users: np.ndarray, n_pop_users: int,
                   alert_ato: np.ndarray, ato_users: np.ndarray, n_ato_users: int,
                   rng: np.random.Generator) -> dict:
-    def rate(w):
-        ww = w[pop_users]
-        return 10_000 * (ww * alert_pop).sum() / ww.sum()
-
-    def recall(w):
-        ww = w[ato_users]
-        return (ww * alert_ato).sum() / ww.sum() if ww.sum() else np.nan
-
+    lo, hi = ratio_ci(alert_pop, np.ones(len(alert_pop)), pop_users, n_pop_users, rng)
     return {
         "alerts_per_10k": float(10_000 * alert_pop.mean()) if len(alert_pop) else 0.0,
-        "alerts_per_10k_ci95": cluster_bootstrap(rate, pop_users, n_pop_users, rng),
+        "alerts_per_10k_ci95": [10_000 * lo, 10_000 * hi],
         "takeover_recall": float(alert_ato.mean()) if len(alert_ato) else float("nan"),
-        "takeover_recall_ci95": cluster_bootstrap(recall, ato_users, n_ato_users, rng),
+        "takeover_recall_ci95": ratio_ci(alert_ato, np.ones(len(alert_ato)), ato_users, n_ato_users, rng),
         "takeovers_caught": int(alert_ato.sum()),
         "_alert_ato": alert_ato,
     }
@@ -151,7 +157,7 @@ def run(data: str, budget: float, out: str, calib_start: str, test_start: str,
 
     def recall_diff_ci(a_ato: np.ndarray, b_ato: np.ndarray) -> list[float]:
         d = a_ato.astype(float) - b_ato.astype(float)
-        return cluster_bootstrap(lambda w: (w[ato_codes] * d).sum() / w[ato_codes].sum(), ato_codes, n_ato, rng)
+        return ratio_ci(d, np.ones(len(d)), ato_codes, n_ato, rng)
 
     for name, (desc, w, b) in variants.items():
         s = scores[name]
@@ -166,9 +172,7 @@ def run(data: str, budget: float, out: str, calib_start: str, test_start: str,
         triage = {
             "rule_alerts_sampled": int(rule_pop.sum()),
             "auto_closed_share": float(closed[rule_pop].mean()) if rule_pop.any() else float("nan"),
-            "auto_closed_share_ci95": cluster_bootstrap(
-                lambda ww: (ww[pop_codes] * closed[tp] * rule[tp]).sum() / max((ww[pop_codes] * rule[tp]).sum(), 1),
-                pop_codes, n_pop, rng),
+            "auto_closed_share_ci95": ratio_ci(closed[tp] & rule[tp], rule[tp], pop_codes, n_pop, rng),
             "rule_caught_takeovers": int((rule & ta).sum()),
             "takeovers_lost_by_auto_close": int((closed & ta).sum()),
         }
