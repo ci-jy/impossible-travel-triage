@@ -1,0 +1,20 @@
+{
+  "variant": "history_lr",
+  "alpha": 1.0,
+  "weights": {
+    "s_asn": 0.3149738267297896,
+    "s_prefix": 0.09639108293808109,
+    "s_country": 0.3490812055314036,
+    "s_ua": 0.0,
+    "s_os": 0.0,
+    "s_fail_user": 0.8865762196707775,
+    "s_ip_spray": 0.0
+  },
+  "intercept": -3.5011867983365397,
+  "threshold": 4.260158906752067,
+  "budget_per_10k": 10.0,
+  "calibration_window": [
+    "2020-04-01",
+    "2020-08-01"
+  ]
+}
