@@ -86,8 +86,9 @@ def reasons(row: pd.Series, terms: pd.Series, weights: dict[str, float], kept: b
                 out.append(f"new {label} for user: {val} ({share})")
             elif not kept and seen > 0:
                 out.append(f"{label} {val} seen {seen}x before for user")
-            elif not kept and int(row["u_n"]) == 0 and tot and pop / tot >= 0.01:
-                out.append(f"first sign-in; {label} {val} common ({pop / tot:.0%} of sampled users)")
+            elif not kept and tot and pop / tot >= 0.01:
+                first = "first sign-in" if int(row["u_n"]) == 0 else "new for user"
+                out.append(f"{first}; {label} {val} common ({pop / tot:.0%} of sampled users)")
         elif t == "s_fail_user" and kept and row["u_fail_24h"] > 0:
             out.append(f"{int(row['u_fail_24h'])} failed sign-ins on account in prior 24h")
         elif t == "s_ip_spray" and kept and row["p_ip_fail_users"] > 0:

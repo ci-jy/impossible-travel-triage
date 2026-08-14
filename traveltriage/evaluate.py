@@ -48,6 +48,8 @@ def cluster_bootstrap(stat_fn, groups: np.ndarray, n_groups: int, rng: np.random
         w = np.bincount(rng.integers(0, n_groups, n_groups), minlength=n_groups)
         vals.append(stat_fn(w))
     vals = np.asarray(vals, dtype=float)
+    if np.isnan(vals).all():
+        return [float("nan"), float("nan")]
     return [float(np.nanpercentile(vals, 2.5)), float(np.nanpercentile(vals, 97.5))]
 
 
