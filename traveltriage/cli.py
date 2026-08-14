@@ -67,8 +67,8 @@ def main(argv: list[str] | None = None) -> int:
     e.add_argument("--data", default="data/")
     e.add_argument("--budget-per-10k", type=float, default=10.0)
     e.add_argument("--out", default="results/eval.json")
-    e.add_argument("--calib-start", default="2020-06-01")
-    e.add_argument("--test-start", default="2020-10-01")
+    e.add_argument("--calib-start", default="2020-04-01")
+    e.add_argument("--test-start", default="2020-08-01")
     e.add_argument("--docs", default="docs")
 
     s = sub.add_parser("score", help="score a sign-in CSV; write alerts with score and reason codes")

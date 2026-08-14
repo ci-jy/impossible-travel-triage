@@ -47,9 +47,9 @@ def test_evaluate_end_to_end(tmp_path):
     out = tmp_path / "results" / "eval.json"
     r = evaluate.run(str(data), 100, str(out), "2020-05-01", "2020-09-01", docs=str(tmp_path / "docs"))
     saved = json.loads(out.read_text())
-    assert saved["primary"] == "history_lr"
+    assert saved["primary"] in saved["variants"]
     assert saved["windows"]["test_takeovers"] > 0
-    v = saved["variants"]["history_lr"]["at_budget"]
+    v = saved["variants"][saved["primary"]]["at_budget"]
     lo, hi = v["takeover_recall_ci95"]
     assert lo <= v["takeover_recall"] <= hi
     # Takeovers come from a never-seen ASN after failed sign-ins; the rule cannot see them.

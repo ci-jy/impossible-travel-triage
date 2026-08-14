@@ -92,7 +92,8 @@ def alert_rows(df: pd.DataFrame, terms: pd.DataFrame, scores: np.ndarray, model:
             "score": round(float(scores[i]), 3),
             "verdict": "kept" if kept else "auto-closed",
             "label": "takeover" if r["is_takeover"] else "benign",
-            "reasons": scoring.reasons(r, terms.iloc[i], model["weights"], kept),
+            "reasons": scoring.reasons(r, terms.iloc[i], model["weights"], kept)
+            + [f"score {scores[i]:.2f} {'above' if kept else 'at or below'} threshold {thr:.2f}"],
         })
     return rows
 
