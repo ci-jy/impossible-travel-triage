@@ -46,7 +46,7 @@
       "min_speed_kmh": 800.0,
       "window_minutes": 90.0
     },
-    "calibration_alerts_per_10k": 30.772937337100554,
+    "calibration_alerts_per_10k": 30.82769345335874,
     "test_average_precision": 0.0003242155330600532,
     "alerts_per_10k": 34.77821919783923,
     "alerts_per_10k_ci95": [
@@ -94,10 +94,10 @@
         0.36363636363636365
       ],
       "at_rule_alert_rate": {
-        "alerts_per_10k": 28.35359058070776,
+        "alerts_per_10k": 28.419148015576447,
         "alerts_per_10k_ci95": [
-          26.251944780550847,
-          30.56845720426772
+          26.324476911507425,
+          30.651919113124357
         ],
         "takeover_recall": 0.5454545454545454,
         "takeover_recall_ci95": [
@@ -201,10 +201,10 @@
         0.36846978557504867
       ],
       "at_rule_alert_rate": {
-        "alerts_per_10k": 37.171065570546354,
+        "alerts_per_10k": 37.26940172284939,
         "alerts_per_10k_ci95": [
-          34.41734416358881,
-          40.50657783964643
+          34.53038137722459,
+          40.637244013322665
         ],
         "takeover_recall": 0.5272727272727272,
         "takeover_recall_ci95": [

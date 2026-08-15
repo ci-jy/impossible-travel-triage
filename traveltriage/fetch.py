@@ -107,7 +107,7 @@ def sample_rba(csv_path: Path, out: Path, users: int, seed: int = 7) -> None:
     con.execute(
         f"""
         COPY (
-          SELECT row_number() OVER (ORDER BY s."Login Timestamp", s."User ID") AS event_id,
+          SELECT row_number() OVER (ORDER BY s."Login Timestamp", s."User ID", s."index") AS event_id,
                  s."User ID"::VARCHAR AS user_id,
                  s."Login Timestamp"::TIMESTAMP AS ts,
                  s."IP Address" AS ip,

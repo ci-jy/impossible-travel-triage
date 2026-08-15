@@ -38,7 +38,7 @@ flowchart LR
   C --> D[Geo-velocity rule<br/>500 km / 800 km/h / 90 min]
   B --> E[No-look-ahead history features<br/>DuckDB window SQL]
   E --> F[Surprisal terms +<br/>smoothed population priors]
-  F --> G[Weighted risk score<br/>scikit-learn weights]
+  F --> G[Weighted risk score<br/>non-negative fitted weights]
   G --> H[Threshold at N alerts / 10k<br/>set on earlier window]
   D --> I[Triage: keep or auto-close<br/>with reason codes]
   H --> I

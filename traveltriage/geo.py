@@ -58,7 +58,7 @@ def geocode(con: duckdb.DuckDBPyConnection, events: str, cities: str | None, out
         cand AS (
           SELECT k.country, k.city, k.region, c.lat, c.lon,
                  row_number() OVER (PARTITION BY k.country, k.city, k.region
-                                    ORDER BY (c.region = k.region) DESC, c.population DESC) AS r
+                                    ORDER BY (c.region = k.region) DESC, c.population DESC, c.lat, c.lon) AS r
           FROM keys k JOIN {cities} c
             ON c.country = k.country AND (c.name = k.city OR c.asciiname = k.city)
         )
