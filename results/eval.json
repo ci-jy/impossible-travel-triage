@@ -32,6 +32,13 @@
     "test_takeovers": 55,
     "test_takeover_users": 54
   },
+  "test_takeover_profile": {
+    "takeovers": 55,
+    "no_prior_signin_within_rule_window": 52,
+    "no_prior_signin_at_all": 12,
+    "from_country_new_to_user": 48,
+    "from_asn_new_to_user": 50
+  },
   "budget_per_10k": 10.0,
   "rule": {
     "definition": {

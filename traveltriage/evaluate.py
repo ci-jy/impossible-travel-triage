@@ -107,6 +107,20 @@ def fit_weights(terms: pd.DataFrame, y: np.ndarray, l2: float = 1.0) -> tuple[di
     return dict(zip(scoring.TERMS, map(float, w))), float(b)
 
 
+def _takeover_profile(df: pd.DataFrame, mask: np.ndarray) -> dict:
+    """Why the rule misses takeovers: how many have a recent prior sign-in at all."""
+    prev_ts = df.sort_values(["user_id", "ts"]).groupby("user_id")["ts"].shift()
+    gap = (df["ts"] - prev_ts.reindex(df.index))[mask]
+    win = pd.Timedelta(minutes=RULE["window_minutes"])
+    return {
+        "takeovers": int(mask.sum()),
+        "no_prior_signin_within_rule_window": int((~(gap <= win)).sum()),
+        "no_prior_signin_at_all": int(gap.isna().sum()),
+        "from_country_new_to_user": int((df.loc[mask, "u_country"] == 0).sum()),
+        "from_asn_new_to_user": int((df.loc[mask, "u_asn"] == 0).sum()),
+    }
+
+
 def run(data: str, budget: float, out: str, calib_start: str, test_start: str,
         docs: str = "docs", seed: int = 7) -> dict:
     data_dir = Path(data)
@@ -188,6 +202,7 @@ def run(data: str, budget: float, out: str, calib_start: str, test_start: str,
             "test_takeovers": int(ta.sum()),
             "test_takeover_users": int(n_ato),
         },
+        "test_takeover_profile": _takeover_profile(df, ta),
         "budget_per_10k": budget,
         "rule": {"definition": RULE, "calibration_alerts_per_10k": rule_calib_rate,
                  "test_average_precision": float(average_precision_score(ato[tp | ta], rule[tp | ta])),

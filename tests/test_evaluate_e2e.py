@@ -57,3 +57,6 @@ def test_evaluate_end_to_end(tmp_path):
     assert (tmp_path / "docs" / "index.html").exists()
     assert (out.parent / "model.json").exists() and (out.parent / "rule_thresholds.json").exists()
     assert r["data"]["takeover_signins_total"] == 12
+    prof = saved["test_takeover_profile"]
+    assert prof["takeovers"] == saved["windows"]["test_takeovers"]
+    assert prof["from_asn_new_to_user"] == prof["takeovers"]
