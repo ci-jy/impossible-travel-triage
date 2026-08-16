@@ -221,3 +221,5 @@ results/                        eval.json, model.json, rule_thresholds.json
   conditional-access outcomes as features.
 - **Next:** add ASN-type and IP-reputation features, learn per-term weights with more labelled takeovers, and
   run the same evaluation on a tenant's real sign-in logs through the Entra mapping.
+
+Project period: 2026-08-13 to 2026-08-16.
