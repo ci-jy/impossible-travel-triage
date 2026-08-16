@@ -5,9 +5,9 @@ Scores Entra ID / Microsoft 365-style sign-in logs on each user's own ASN, IP-pr
 ## Results
 
 - **Built impossible-travel alert triage for SOC analysts that caught 29.1% of account takeovers** at 10 alerts per 10k logins vs 5.5% for the rule, in DuckDB
-- **Caught 10x more account takeovers than the geo-velocity rule at the same alert volume** (54.5% vs 5.5%) by scoring per-user ASN history in DuckDB SQL
-- **Auto-closed 97.7% of 1,061 impossible-travel rule alerts** on VPN, carrier and cloud hops, each with plain reason codes, using Python and pandas
-- **Found 52 of 55 account takeovers had no sign-in in the prior 90 minutes**, so the impossible-travel rule could never fire, using DuckDB window SQL
+- **Caught 10x more account takeovers than the geo-velocity rule at equal alert volume** (54.5% vs 5.5%) by scoring failed-login, country and ASN history in DuckDB
+- **Auto-closed 97.7% of 1,061 impossible-travel rule alerts** with plain reason codes, losing 2 of the 3 takeovers the rule caught, in Python and pandas
+- **Found 52 of 55 account takeovers had no sign-in in the prior 90 minutes**, so the impossible-travel rule could never fire, using Python and pandas
 
 ![Takeover recall vs alert budget: history score vs geo-velocity rule](docs/recall_vs_budget.png)
 
